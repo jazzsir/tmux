@@ -16,3 +16,6 @@ sudo apt-get install xclip
 
 # 버퍼 삭제 (Clear history)
 - Ctrl + a -> Ctrl + r
+
+# how to install tmux with no root and Internet
+https://dvtalk.me/2020/07/23/install-tmux-without-root-and-internet-access/
