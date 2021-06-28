@@ -1,0 +1,25 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="ansible"
+else
+    SESSIONNAME="ansible-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n ansible -d
+        tmux send-keys 'ssh jazzsir@172.30.1.30' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -h
+        tmux send-keys 'ssh jazzsir@172.30.1.35' 'C-m'
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

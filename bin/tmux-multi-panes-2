@@ -1,0 +1,68 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="my"
+else
+    SESSIONNAME="my-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n 'CAM' -d
+        tmux send-keys 'hbssh ID PW 1.1.1.3' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -h
+        tmux send-keys 'hbssh ID PW 1.1.1.1' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+
+
+        tmux new-window -a -t $SESSIONNAME -n '01' 'hbssh ID PW 1.1.1.3'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:2 -h
+        tmux send-keys 'hbssh ID PW 1.1.1.3' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:2 -L
+
+        tmux split-window -t $SESSIONNAME:2 -v
+        tmux send-keys 'hbssh ID PW 1.1.1.3' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux new-window -a -t $SESSIONNAME -n '02' 'hbssh ID PW 1.0.1.5'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:3 -h
+        tmux send-keys 'hbssh ID PW 1.1.1.3' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:3 -L
+ 
+        tmux split-window -t $SESSIONNAME:3 -v
+        tmux send-keys 'hbssh ID PW 1.1.1.8' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:3 -R
+
+        tmux split-window -t $SESSIONNAME:3 -v
+        tmux send-keys 'hbssh ID PW 1.1.1.9' 'C-m'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux new-window -a -t $SESSIONNAME -n '03' 'hbssh ID PW 1.1.1.4'
+        tmux send-keys 'cd /home/myhome' 'C-m'
+
+        tmux select-window -t $SESSIONNAME:2
+
+#        tmux set-window-option synchronize-panes on > /dev/null
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

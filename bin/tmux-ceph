@@ -1,0 +1,46 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="ceph"
+else
+    SESSIONNAME="ceph-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n ceph -d
+        tmux send-keys 'ssh jazzsir@172.30.1.200' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -h
+        tmux send-keys 'ssh jazzsir@172.30.1.201' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:1 -L
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'ssh jazzsir@172.30.1.202' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'ssh jazzsir@172.30.1.203' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:1 -R
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'ssh jazzsir@172.30.1.204' 'C-m'
+
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'ssh jazzsir@172.30.1.205' 'C-m'
+
+
+        ## switch the "base" window
+        tmux select-window -t $SESSIONNAME:1
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

@@ -1,0 +1,65 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="ha"
+else
+    SESSIONNAME="ha-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n ansible -d
+        tmux send-keys 'hbssh jazzsir hbseo 172.30.1.70' 'C-m'
+
+        tmux new-window -a -t $SESSIONNAME -n 'all-nodes' 'hbssh root hbseo 172.30.1.30'
+
+        tmux split-window -t $SESSIONNAME:2 -h
+        tmux send-keys 'hbssh root hbseo 172.30.1.31' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:2 -L
+
+        tmux split-window -t $SESSIONNAME:2 -v
+        tmux send-keys 'hbssh root hbseo 172.30.1.32' 'C-m'
+ 
+        tmux select-pane -t $SESSIONNAME:2 -R
+
+        tmux split-window -t $SESSIONNAME:2 -v
+        tmux send-keys 'hbssh root hbseo 172.30.1.35' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:2 -v
+        tmux send-keys 'hbssh root hbseo 172.30.1.36' 'C-m'
+
+
+        tmux new-window -a -t $SESSIONNAME -n 'masters' 'hbssh root hbseo 172.30.1.30'
+
+        tmux split-window -t $SESSIONNAME:3 -h
+        tmux send-keys 'hbssh root hbseo 172.30.1.31' 'C-m'
+
+        #tmux select-pane -t $SESSIONNAME:3 -L
+        tmux split-window -t $SESSIONNAME:3 -v
+        tmux send-keys 'hbssh root hbseo 172.30.1.32' 'C-m'
+
+
+        tmux new-window -a -t $SESSIONNAME -n 'workers' 'hbssh root hbseo 172.30.1.35'
+
+        tmux split-window -t $SESSIONNAME:4 -h
+        tmux send-keys 'hbssh root hbseo 172.30.1.36' 'C-m'
+ 
+        tmux new-window -a -t $SESSIONNAME -n 'proxies' 'hbssh root hbseo 172.30.1.40'
+
+        tmux split-window -t $SESSIONNAME:5 -h
+        tmux send-keys 'hbssh root hbseo 172.30.1.41' 'C-m'
+ 
+ 
+        ## switch the "base" window
+        tmux select-window -t $SESSIONNAME:0
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

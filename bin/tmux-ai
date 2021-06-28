@@ -1,0 +1,31 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="ai"
+else
+    SESSIONNAME="ai-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n ai -d
+        tmux send-keys 'hbssh ID PW 192.168.125.141' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:1 -L
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'hbssh ID PW 192.168.125.141' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -h
+        tmux send-keys 'hbssh ID PW 192.168.125.141' 'C-m'
+
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

@@ -1,0 +1,43 @@
+#!/bin/bash
+#/home/ryann/scripts/restoretmux.sh
+ 
+if [ -z "$1" ]
+then
+    SESSIONNAME="2qv"
+else
+    SESSIONNAME="2qv-$1"
+fi
+
+tmux has-session -t $SESSIONNAME 2> /dev/null
+ 
+if [ $? != 0 ]
+    then
+        tmux new-session -s $SESSIONNAME -n ACT/STB -d
+        tmux send-keys 'hbssh root xxxx 1.1.1.1' 'C-m'
+        tmux send-keys 'cd /home/xxxx' 'C-m'
+
+        tmux split-window -t $SESSIONNAME:1 -h
+        tmux send-keys 'hbssh root xxxx 1.1.1.2' 'C-m'
+        tmux send-keys 'cd /home/xxxx ' 'C-m'
+
+        tmux select-pane -t $SESSIONNAME:1 -L
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'hbssh root xxxx 1.1.1.3' 'C-m'
+        tmux send-keys 'cd /home/xxxx' 'C-m'
+ 
+        tmux select-pane -t $SESSIONNAME:1 -R
+
+        tmux split-window -t $SESSIONNAME:1 -v
+        tmux send-keys 'hbssh root xxxx 1.1.1.4' 'C-m'
+        tmux send-keys 'cd /home/xxxx' 'C-m'
+
+
+        ## switch the "base" window
+        tmux select-window -t $SESSIONNAME:1
+
+        tmux attach -t $SESSIONNAME
+    else
+        echo "$SESSIONNAME aleady exists"
+fi
+ 

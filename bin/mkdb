@@ -1,0 +1,6 @@
+echo "rm tags cscope.*"
+rm tags cscope.*
+echo "ctags -R"
+ctags -R
+echo "mkcscope.sh"
+mkcscope.sh
