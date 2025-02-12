@@ -1,4 +1,5 @@
 # install packages
+```
 sudo apt-get install pip
 sudo apt-get install python-dev
 sudo apt-get install python-pip
@@ -7,6 +8,7 @@ sudo cp ~/.tmux/vendor/basic-cpu-and-memory.tmux /usr/local/bin/tmux-mem-cpu-loa
 sudo chmod +x /usr/local/bin/tmux-mem-cpu-load
 ln -s .tmux/.tmux.conf
 sudo apt-get install xclip
+```
 
 # copy
  - Ctrl + a와 [ 를 누르고 
